@@ -8,10 +8,11 @@ struct ContentView: View {
     @State private var add = false
     @State private var equal = false
     @State private var decimal = false
-    @State private var secondNum = 0
+    @State private var firstNum = ""
+    @State private var secondNum = ""
     
     
-    let buttons: [[String]] = [
+    var buttons: [[String]] = [
         ["AC", "+/-", "%", "÷"],
         ["7", "8", "9", "x"],
         ["4", "5", "6", "-"],
@@ -118,30 +119,86 @@ struct ContentView: View {
     
     func buttonPressed(_ button: String) {
         if button == "=" {
+            if 
+        }
+        else if button == "x" {
+            divide = false
+            multiply = false
+            subtract = false
+            add = false
+            equal = false
+            decimal = false
             
-        } else if button == "x" {
+            multiply = true
+            firstNum = displayText
             
-        } else if button == "÷" {
-            
-        } else if button == "-"
+        }
+        else if button == "÷" 
         {
-            
-        } else if button == "+"
+            divide = false
+            multiply = false
+            subtract = false
+            add = false
+            equal = false
+            decimal = false
+        }
+        else if button == "-"
         {
-            
-        } else if button == "%"
+            divide = false
+            multiply = false
+            subtract = false
+            add = false
+            equal = false
+            decimal = false
+        }
+        else if button == "+"
         {
+            divide = false
+            multiply = false
+            subtract = false
+            add = false
+            equal = false
+            decimal = false
             
-        } else if button == "+/-"
+            displayText = (Int(displayText)! + secondNum)
+        }
+        else if button == "%"
         {
-            
-        } else if button == "AC"
+            displayText = String((Double(displayText)!) / 100)
+        }
+        else if button == "+/-"
+        {
+            if decimal == true
+            {
+                displayText = String(Double(displayText)! * -1)
+            }
+            if decimal == false
+            {
+                displayText = String(Int(displayText)! * -1)
+            }
+        }
+        else if button == "AC" || button == "C"
         {
             displayText = "0"
-        } else if button == "."
+            divide = false
+            multiply = false
+            subtract = false
+            add = false
+            equal = false
+            decimal = false
+            firstNum = ""
+            secondNum = ""
+            
+        }
+        else if button == "."
         {
-            displayText = "0"
-        }else
+            if decimal == false
+            {
+                displayText += "."
+            }
+            decimal = true
+        }
+        else
         {
             if displayText == "0"
             {
