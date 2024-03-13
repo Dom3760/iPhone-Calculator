@@ -34,7 +34,7 @@ struct ContentView: View {
 //                    .frame(width: UIScreen.main.bounds.width * 0.9)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .font(.system(size: 90))
+                    .font(.system(size: 80))
             }
             
             ForEach(buttons, id: \.self) { row in
@@ -89,7 +89,6 @@ struct ContentView: View {
                                             .padding()
                                             .background(Color(UIColor.darkGray))
                                             .foregroundColor(.white)
-//                                            .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
                                             .cornerRadius(60)
                                     }
                                 
@@ -103,7 +102,7 @@ struct ContentView: View {
                                             .frame(width: 80, height: 80)
                                             .background(Color(UIColor.darkGray))
                                             .foregroundColor(.white)
-                                            .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                                            .cornerRadius(50)
                                     }
                                 }
                                
@@ -119,7 +118,47 @@ struct ContentView: View {
     
     func buttonPressed(_ button: String) {
         if button == "=" {
-            if 
+            if divide == true
+            {
+                if Int(firstNum) == 0 || Int(secondNum) == 0
+                {
+                    displayText = "error"
+                    return
+                }
+                else
+                {
+                    secondNum = displayText
+                    displayText = String(Double(firstNum)! / Double(secondNum)!)
+                    displayText = String(format: "%9.4f", NSDecimalNumber(decimal: Decimal(Double(displayText)!)).doubleValue)
+                    return
+                }
+            }
+            if multiply == true
+            {
+                secondNum = displayText
+                displayText = String(Double(firstNum)! * Double(secondNum)!)
+                return
+            }
+            if subtract == true
+            {
+                secondNum = displayText
+                displayText = String(Double(firstNum)! - Double(secondNum)!)
+                return
+            }
+            if add == true
+            {
+                secondNum = displayText
+                displayText = String(Double(firstNum)! + Double(secondNum)!)
+                return
+            }
+            if secondNum == ""
+            {
+                return
+            }
+            else
+            {
+                displayText = "error"
+            }
         }
         else if button == "x" {
             divide = false
@@ -131,6 +170,7 @@ struct ContentView: View {
             
             multiply = true
             firstNum = displayText
+            displayText = "0"
             
         }
         else if button == "÷" 
@@ -141,6 +181,10 @@ struct ContentView: View {
             add = false
             equal = false
             decimal = false
+            
+            divide = true
+            firstNum = displayText
+            displayText = "0"
         }
         else if button == "-"
         {
@@ -150,6 +194,10 @@ struct ContentView: View {
             add = false
             equal = false
             decimal = false
+            
+            subtract = true
+            firstNum = displayText
+            displayText = "0"
         }
         else if button == "+"
         {
@@ -160,7 +208,9 @@ struct ContentView: View {
             equal = false
             decimal = false
             
-            displayText = (Int(displayText)! + secondNum)
+            add = true
+            firstNum = displayText
+            displayText = "0"
         }
         else if button == "%"
         {
@@ -209,8 +259,10 @@ struct ContentView: View {
                 displayText += button
             }
         }
-        
-        // Add conditions for other buttons as needed
+        if displayText != "0"
+        {
+            button
+        }
     }
 }
 
