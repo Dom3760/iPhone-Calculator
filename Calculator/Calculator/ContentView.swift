@@ -1,6 +1,6 @@
 import SwiftUI
-
 struct ContentView: View {
+    //makeing varibales that will store many booleans, and text boxes for the calculator to work
     @State private var displayText = "0"
     @State private var divide = false
     @State private var multiply = false
@@ -11,8 +11,8 @@ struct ContentView: View {
     @State private var firstNum = ""
     @State private var secondNum = ""
     
-    
-    var buttons: [[String]] = [
+    // makes a 2d array to simplify adding the buttons to the calculator.
+    @State private var buttons: [[String]] = [
         ["AC", "+/-", "%", "÷"],
         ["7", "8", "9", "x"],
         ["4", "5", "6", "-"],
@@ -21,29 +21,39 @@ struct ContentView: View {
     ]
     
     var body: some View {
+        // chat gpt told me lol, but this appearently selects the background and makes an overlay that is colored black
         Color.black.edgesIgnoringSafeArea(.all)
                 .overlay(
 
-                    
+        //makes a vstack that will space everything apart
         VStack(spacing: 10) {
+            //adds a space between the HStacks and the VStacks
             Spacer()
+            //HStack that puts the text/ buttons on top of one another
             HStack {
                 Spacer()
+                //makes the text for the display
                 Text(displayText)
+                    //makes padding for the display to stay away from buttons.
                     .padding()
-//                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                    // makes the text have white color, rounded corners(?), and that the font size will change
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .font(.system(size: 80))
+                    // condition that if the count of characters is above 6 then it will change the font size
+                    .font( displayText.count > 6 ? .system(size: 50) : .system(size: 80))
             }
-            
+            // makes a for each loop for each array in the button array.
             ForEach(buttons, id: \.self) { row in
                 HStack(spacing: 10) {
+                    // for each loop for the array's in the buttons array
                     ForEach(row, id: \.self) { button in
-                        if ["AC", "+/-", "%"].contains(button) {
+                        // if the symboles are "AC", "+/-", "%", or "C" then it will make a button with the symbole
+                        if ["AC", "+/-", "%", "C"].contains(button) {
                             Button(action: {
+                            // if the button is pressed it will launch the button pressed function
                             self.buttonPressed(button)
                             }) {
+                            //makes the text the current button it is on, adds padding, height, and width, background color,text color, and rounds the corners
                             Text(button)
                             .padding()
                             .frame(width: 80, height: 80)
@@ -51,12 +61,15 @@ struct ContentView: View {
                             .foregroundColor(.black)
                             .cornerRadius(50)
                                                     }
-                            } 
+                            }
+                        // if the symboles are "%", "x", "-", "+", "=" then it will make a button with the symbole
                         else if ["%", "x", "-", "+", "="].contains(button) {
                                 Button(action: {
+                                // if the button is pressed it will launch the button pressed function
                                 self.buttonPressed(button)
                                 }) {
                                 Text(button)
+                                //makes the text the current button it is on, adds padding, height, and width, background color,text color, and rounds the corners
                                 .padding()
                                 .frame(width: 80, height: 80)
                                 .background(Color(UIColor.orange))
@@ -64,11 +77,14 @@ struct ContentView: View {
                                 .cornerRadius(50)
                                 }
                             } 
+                        // if it is the "%" then it will make a button with the symbole
                         else if button == buttons[0][3]
                             {
                                 Button(action: {
+                                // if the button is pressed it will launch the button pressed function
                                 self.buttonPressed(button)
                                 }) {
+                                //makes the text the current button it is on, adds padding, height, and width, background color,text color, and rounds the corners
                                 Text(button)
                                 .padding()
                                 .frame(width: 80, height: 80)
@@ -77,13 +93,15 @@ struct ContentView: View {
                                 .cornerRadius(50)
                                 }
                             }
-                        
+                            // if no other conditions above are met then it will assume that it is a number
                             else {
-                                
+                                // if it is the "0" then it will make a button with the symbole
                                 if button == "0"{
                                     Button(action: {
+                                        // if the button is pressed it will launch the button pressed function
                                         self.buttonPressed(button)
                                     }) {
+                                        //makes the text the current button it is on, adds padding, height, and width, background color,text color, and rounds the corners
                                         Text(button)
                                             .frame(width: 150, height: 50)
                                             .padding()
@@ -91,12 +109,13 @@ struct ContentView: View {
                                             .foregroundColor(.white)
                                             .cornerRadius(60)
                                     }
-                                
                                 }
+                                // the number that is pressed will trigger the buttonpressed function
                                 else{
                                     Button(action: {
                                         self.buttonPressed(button)
                                     }) {
+                                        //adds the numebr to button, adds padding, height, and width, background color,text color, and rounds the corners
                                         Text(button)
                                             .padding()
                                             .frame(width: 80, height: 80)
@@ -112,42 +131,54 @@ struct ContentView: View {
                 }
             }
         }
+        // adds padding to somthing lol
         .padding()
         )
     }
-    
+    //button pressed function that will accept the parameter that is the button pressed.
     func buttonPressed(_ button: String) {
+        //if the = button is pressed it will do the oporaters
         if button == "=" {
+            //if the divide button is pressed then it set divide to true and then divide the two numbers that were entered.
             if divide == true
             {
-                if Int(firstNum) == 0 || Int(secondNum) == 0
+                // if the second number is zero then it will say error.
+                if Int(secondNum) == 0
                 {
+                    // will display error and return so it will not do the next case
                     displayText = "error"
                     return
                 }
+                // otherwise it will bind the second numer to the display number, and will divide them, then return
                 else
                 {
                     secondNum = displayText
                     displayText = String(Double(firstNum)! / Double(secondNum)!)
-                    displayText = String(format: "%9.4f", NSDecimalNumber(decimal: Decimal(Double(displayText)!)).doubleValue)
                     return
                 }
             }
+            // if multiply is pressed then it will swich var to true and then do this
             if multiply == true
             {
+                // it will bind thte second number to the display
                 secondNum = displayText
+                // it will then multiply the first and second number together and return.
                 displayText = String(Double(firstNum)! * Double(secondNum)!)
                 return
             }
+            // if subtract is pressed then it will swich var to true and then do this
             if subtract == true
             {
                 secondNum = displayText
+                // it will then subtract the first and second number together and return.
                 displayText = String(Double(firstNum)! - Double(secondNum)!)
                 return
             }
+            // if add is pressed then it will swich var to true and then do this
             if add == true
             {
                 secondNum = displayText
+                // it will then add the first and second number together and return.
                 displayText = String(Double(firstNum)! + Double(secondNum)!)
                 return
             }
@@ -160,7 +191,15 @@ struct ContentView: View {
                 displayText = "error"
             }
         }
+        // if multiply button is pressed then it will launch this.
         else if button == "x" {
+            // looked this part up. this appearently checks if the second number is 0 if not it will let the result be be the two divided numbers and then limit it to 9 characters (supposivly)
+            if let firstNumDouble = Double(firstNum), let secondNumDouble = Double(secondNum) {
+                        if secondNumDouble != 0 {
+                            let result = firstNumDouble / secondNumDouble
+                            displayText = String(format: "%.9f", result)
+                        }
+                    }
             divide = false
             multiply = false
             subtract = false
@@ -175,6 +214,14 @@ struct ContentView: View {
         }
         else if button == "÷" 
         {
+            if let firstNumDouble = Double(firstNum), let secondNumDouble = Double(secondNum) {
+                        if secondNumDouble != 0 {
+                            let result = firstNumDouble / secondNumDouble
+                            displayText = String(format: "%.9f", result)
+                        } else {
+                            displayText = "Error: Division by zero"
+                        }
+                    }
             divide = false
             multiply = false
             subtract = false
@@ -238,6 +285,7 @@ struct ContentView: View {
             decimal = false
             firstNum = ""
             secondNum = ""
+            buttons[0][0] = "AC"
             
         }
         else if button == "."
@@ -250,6 +298,7 @@ struct ContentView: View {
         }
         else
         {
+            buttons[0][0] = "C"
             if displayText == "0"
             {
                 displayText = ""
@@ -258,10 +307,17 @@ struct ContentView: View {
             {
                 displayText += button
             }
-        }
-        if displayText != "0"
-        {
-            button
+            
+            if displayText.count > 9 {
+                    if let dotIndex = displayText.firstIndex(of: ".") {
+                        // If there is a decimal point, truncate the string to 9 characters including the decimal point
+                        let endIndex = displayText.index(dotIndex, offsetBy: 9, limitedBy: displayText.endIndex) ?? displayText.endIndex
+                        displayText = String(displayText.prefix(upTo: endIndex))
+                    } else {
+                        // If there is no decimal point, truncate the string to 9 characters
+                        displayText = String(displayText.prefix(9))
+                    }
+                }
         }
     }
 }
