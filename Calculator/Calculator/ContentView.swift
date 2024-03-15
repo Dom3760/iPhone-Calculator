@@ -200,6 +200,7 @@ struct ContentView: View {
                             displayText = String(format: "%.9f", result)
                         }
                     }
+            // this sets all things to false and then sets multiply to true.
             divide = false
             multiply = false
             subtract = false
@@ -208,20 +209,24 @@ struct ContentView: View {
             decimal = false
             
             multiply = true
+            // sets first num to display text then sets display text to 0 so 
             firstNum = displayText
             displayText = "0"
             
         }
+        //if the button pressed is the divide button then it will bind first num and second num to variables and then divide them
         else if button == "÷" 
         {
             if let firstNumDouble = Double(firstNum), let secondNumDouble = Double(secondNum) {
                         if secondNumDouble != 0 {
                             let result = firstNumDouble / secondNumDouble
                             displayText = String(format: "%.9f", result)
+                        //else if the number is 0 then display error message.
                         } else {
                             displayText = "Error: Division by zero"
                         }
                     }
+            // sets all variables to false then puts divide operator to true
             divide = false
             multiply = false
             subtract = false
@@ -230,11 +235,14 @@ struct ContentView: View {
             decimal = false
             
             divide = true
+            // makes first number equal display text and then makes it zero to make room for second num
             firstNum = displayText
             displayText = "0"
         }
+        //else if the button pressed is "-"
         else if button == "-"
         {
+            //sets all operators to false then sets subtract to true
             divide = false
             multiply = false
             subtract = false
@@ -243,39 +251,50 @@ struct ContentView: View {
             decimal = false
             
             subtract = true
+            //sets first num to display text then sets to 0
             firstNum = displayText
             displayText = "0"
         }
+        //else if the button pressed is "+"
         else if button == "+"
         {
+            //sets all other operators to false
             divide = false
             multiply = false
             subtract = false
             add = false
             equal = false
             decimal = false
-            
+
+            //sets add to true and then stores the first num and sets display to 0
             add = true
             firstNum = displayText
             displayText = "0"
         }
+        //else if the button pressed is "%"
         else if button == "%"
         {
+            // sets display text to 1 percent of the number.
             displayText = String((Double(displayText)!) / 100)
         }
+        //else if the button pressed is "+/-"'
         else if button == "+/-"
         {
+            //if decimal is active then it will be a double and negitve/positive
             if decimal == true
             {
                 displayText = String(Double(displayText)! * -1)
             }
+            //if decimal is active then it will be a double and negitve/positive
             if decimal == false
             {
                 displayText = String(Int(displayText)! * -1)
             }
         }
+        //else if the button pressed is "AC/C"
         else if button == "AC" || button == "C"
         {
+            // when the clear button is pressed then it will revert all variables to original value, and change button back to "AC"
             displayText = "0"
             divide = false
             multiply = false
@@ -288,16 +307,21 @@ struct ContentView: View {
             buttons[0][0] = "AC"
             
         }
+        //else if the button pressed is "."
         else if button == "."
         {
+            //if the decimal is off then it will add a dot.
             if decimal == false
             {
                 displayText += "."
             }
+            //sets decimal to true.
             decimal = true
         }
+        //else it will 
         else
         {
+            // it will set the button to C and the display to 0
             buttons[0][0] = "C"
             if displayText == "0"
             {
@@ -307,14 +331,14 @@ struct ContentView: View {
             {
                 displayText += button
             }
-            
+            // if the display's character count is greater than 9 then (barealy understand this but it kinda worked to limit characters)
             if displayText.count > 9 {
                     if let dotIndex = displayText.firstIndex(of: ".") {
-                        // If there is a decimal point, truncate the string to 9 characters including the decimal point
+                        // If there is a decimal point, lower the string to 9 characters including the decimal point
                         let endIndex = displayText.index(dotIndex, offsetBy: 9, limitedBy: displayText.endIndex) ?? displayText.endIndex
                         displayText = String(displayText.prefix(upTo: endIndex))
                     } else {
-                        // If there is no decimal point, truncate the string to 9 characters
+                        // If there is no decimal point, lower the string to 9 characters
                         displayText = String(displayText.prefix(9))
                     }
                 }
